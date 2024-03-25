@@ -1,23 +1,29 @@
 import requests
 from bs4 import BeautifulSoup
+import re
 
-def extract_reviews(product_id, opinions_count):
+def extract_reviews(product_id):
     klucz = product_id
-    ilosc_opinii=opinions_count
-
-    strony=round(((ilosc_opinii+5)/10))
-
     users_data = []
-    for i in range(1,strony+1):
+
+    for i in range(1,1000):
         strona = f"https://www.ceneo.pl/{klucz}/opinie-{i}"
 
         req = requests.get(strona)
-
         soup = BeautifulSoup(req.content, "html.parser")
-
-
-
         user_posts = soup.find_all("div", class_="user-post")
+
+        #To stop when reaches an end
+        review_count_text = soup.find('div', class_='score-extend__review').get_text()
+        # Use regex to extract only the number
+        review_count_number = re.search(r'\d+', review_count_text)
+        if review_count_number:
+            koniec = int(review_count_number.group())
+        end = round(koniec/10)+1
+        if end < koniec/10+1:
+            end+=1
+        if i == end:
+            break        
 
         for post in user_posts:
         #ID
@@ -25,9 +31,15 @@ def extract_reviews(product_id, opinions_count):
         #NAME
             user_name_element = post.find("span", class_="user-post__author-name") 
             user_name = user_name_element.get_text().strip() if user_name_element else "N/A" 
-        #RECOMMENDATION *DO NAPRAWY*
+        #RECOMMENDATION
             user_recommendation_elem = post.find("span", class_="user-post__author-recomendation")
-            user_recommendation = user_recommendation_elem.find("em", class_="recommended").get_text().strip() if user_recommendation_elem else "N/A"
+            if user_recommendation_elem:
+                recommended_elem = user_recommendation_elem.find("em", class_="recommended")
+                not_recommended_elem = user_recommendation_elem.find("em", class_="not-recommended")
+                if recommended_elem:
+                    user_recommendation = recommended_elem.get_text().strip()
+                elif not_recommended_elem:
+                    user_recommendation = not_recommended_elem.get_text().strip()
         #RATING 
             user_rating_elem = post.find("span", class_="user-post__score-count")
             user_rating = user_rating_elem.get_text().strip() if user_rating_elem else "N/A"    
@@ -79,5 +91,5 @@ def extract_reviews(product_id, opinions_count):
             }
             
             users_data.append(user_data)
-            
+
     return users_data
