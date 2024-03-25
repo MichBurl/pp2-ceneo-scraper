@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data</title>
+</head>
+<body>
+    <h1>User Data</h1>
+    <ul>
+        {% for user in users_data %}
+        <li>
+            <p>ID: {{ user.id }}</p>
+            <p>Name: {{ user.name }}</p>
+            <p>Recommended: {{ user.recommended }}</p>
+            <p>Rating: {{ user.rating }}</p>
+            <p>Is Bought: {{ user.is_bought }}</p>
+            <p>Time Added: {{ user.time_added }}</p>
+            <p>Time Bought: {{ user.time_bought }}</p>
+            <p>Liked: {{ user.liked }}</p>
+            <p>Disliked: {{ user.dissliked }}</p>
+            <p>Opinion: {{ user.opinion }}</p>
+            <p>Features: {{ user.features }}</p>
+            <p>Flaws: {{ user.flaws }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
