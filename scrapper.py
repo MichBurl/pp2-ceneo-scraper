@@ -3,6 +3,9 @@ from bs4 import BeautifulSoup
 import re
 import json
 import csv
+import matplotlib.pyplot as plt
+import base64
+from io import BytesIO
 
 class Scraper:
     def __init__(self, product_id):
@@ -49,7 +52,7 @@ class Scraper:
                         user_recommendation = not_recommended_elem.get_text().strip()
             #RATING 
                 user_rating_elem = post.find("span", class_="user-post__score-count")
-                user_rating = user_rating_elem.get_text().strip() if user_rating_elem else "N/A"    
+                user_rating = user_rating_elem.get_text().strip() if user_rating_elem else "0"    
             #IS_BOUGHT
                 is_bought = post.find("span", class_="user-post__published")
                 user_is_bought = "użytkowania" in is_bought.get_text().strip() if is_bought else False

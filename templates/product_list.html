@@ -13,5 +13,17 @@
             <li><a href="{{ item.url }}">{{ item.name }}</a></li>
         {% endfor %}
     </ul>
+    <h1>Ratings and Recommendations</h1>
+    <!-- Ratings Bar Chart -->
+    <div>
+        <h2>Ratings</h2>
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Ratings Bar Chart">
+    </div>
+
+    <!-- Recommendations Pie Chart -->
+    <div>
+        <h2>Recommendations</h2>
+        <img src="data:image/png;base64,{{ plot_url1 }}" alt="Recommendations Pie Chart">
+    </div>
 </body>
 </html>

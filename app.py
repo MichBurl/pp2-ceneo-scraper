@@ -3,6 +3,11 @@ from scrapper import Scraper  # Import the Scraper class from scraper.py
 import json
 import csv
 import io
+import matplotlib
+matplotlib.use('Agg')  # Set the backend to Agg before importing pyplot
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 app = Flask(__name__)
 
@@ -17,8 +22,57 @@ menu = [
 ]
 
 # Funkcja renderująca szablon z menu
-def render_with_menu(template_name):
-    return render_template(template_name, menu=menu)
+def render_with_menu(template_name, **kwargs):
+    return render_template(template_name, menu=menu, **kwargs)
+
+# Funkcja do generowania wykresu słupkowego
+def create_rating_bar_chart(ratings_data):
+    # Extract ratings and their counts
+    ratings = []
+    counts = []
+    for rating, count in ratings_data.items():
+        ratings.append(rating)
+        counts.append(count)
+
+    # Create bar chart
+    plt.figure()  # Create a new figure for each chart
+    plt.bar(ratings, counts, align='center', alpha=0.5)
+    plt.xlabel('Rating')
+    plt.ylabel('Count')
+    plt.title('Ratings and Counts')
+    plt.tight_layout()
+
+    # Save plot to a BytesIO object
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    
+    # Encode plot to base64
+    plot_url = base64.b64encode(img.getvalue()).decode()
+    img.close()
+
+    return plot_url
+
+def create_recommended_pie_chart(recommendations_count):
+    # Create pie chart
+    plt.figure()  # Create a new figure for each chart
+    labels = list(recommendations_count.keys())
+    sizes = list(recommendations_count.values())
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    plt.title('Recommendations')
+    plt.tight_layout()
+
+    # Save plot to a BytesIO object
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    
+    # Encode plot to base64
+    plot_url1 = base64.b64encode(img.getvalue()).decode()
+    img.close()
+
+    return plot_url1
 
 @app.route('/')
 def index():
@@ -90,7 +144,23 @@ def download_json():
 
 @app.route('/product_list')
 def product_list():
-    return render_with_menu('product_list.html')
+    # Count ratings
+    ratings_count = {}
+    for user in global_users_data:
+        rating = user["rating"]
+        ratings_count[rating] = ratings_count.get(rating, 0) + 1
+
+    plot_url = create_rating_bar_chart(ratings_count)
+
+    # Count recommendations
+    recommendations_count = {}
+    for user in global_users_data:
+        recommendation = user["recommended"]
+        if recommendation in ["Polecam", "Nie polecam"]:
+            recommendations_count[recommendation] = recommendations_count.get(recommendation, 0) + 1
+
+    plot_url1 = create_recommended_pie_chart(recommendations_count)
+    return render_with_menu('product_list.html', plot_url=plot_url, plot_url1=plot_url1)
 
 @app.route('/about')
 def about():
