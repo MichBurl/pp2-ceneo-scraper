@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
-from scrapper import Scraper  # Import the Scraper class from scraper.py
+from flask import Flask, render_template, request, redirect, url_for, send_file
+from scrapper import Scraper, Product  # Import the Scraper class from scraper.py
 import json
 import csv
 import io
@@ -13,7 +13,9 @@ app = Flask(__name__)
 
 # Define a global variable to store the scraped data
 global_users_data = []
+produkt = Product()
 
+#Adding to every page menu
 menu = [
     {"name": "Ekstrakcja opinii", "url": "/extract_reviews"},
     {"name": "Lista produktów", "url": "/product_list"},
@@ -24,55 +26,6 @@ menu = [
 # Funkcja renderująca szablon z menu
 def render_with_menu(template_name, **kwargs):
     return render_template(template_name, menu=menu, **kwargs)
-
-# Funkcja do generowania wykresu słupkowego
-def create_rating_bar_chart(ratings_data):
-    # Extract ratings and their counts
-    ratings = []
-    counts = []
-    for rating, count in ratings_data.items():
-        ratings.append(rating)
-        counts.append(count)
-
-    # Create bar chart
-    plt.figure()  # Create a new figure for each chart
-    plt.bar(ratings, counts, align='center', alpha=0.5)
-    plt.xlabel('Rating')
-    plt.ylabel('Count')
-    plt.title('Ratings and Counts')
-    plt.tight_layout()
-
-    # Save plot to a BytesIO object
-    img = BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    
-    # Encode plot to base64
-    plot_url = base64.b64encode(img.getvalue()).decode()
-    img.close()
-
-    return plot_url
-
-def create_recommended_pie_chart(recommendations_count):
-    # Create pie chart
-    plt.figure()  # Create a new figure for each chart
-    labels = list(recommendations_count.keys())
-    sizes = list(recommendations_count.values())
-    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
-    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    plt.title('Recommendations')
-    plt.tight_layout()
-
-    # Save plot to a BytesIO object
-    img = BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    
-    # Encode plot to base64
-    plot_url1 = base64.b64encode(img.getvalue()).decode()
-    img.close()
-
-    return plot_url1
 
 @app.route('/')
 def index():
@@ -98,7 +51,7 @@ def reviews():
         # Call the extract_reviews method to get the reviews data
         global global_users_data
         global_users_data = scraper.extract_reviews()
-        return render_template('reviews.html', users_data=global_users_data)
+        return redirect(url_for('product_list'))
     except Exception as e:
         error_message = f"An error occurred: {str(e)}"
         return redirect(url_for('error', error_message=error_message))
@@ -108,6 +61,7 @@ def reviews():
 def error(error_message):
     return render_template('error.html', error_message=error_message)
 
+#Pobranie CSV
 @app.route('/download_csv')
 def download_csv():
     global global_users_data
@@ -127,6 +81,7 @@ def download_csv():
         as_attachment=True
     )
 
+#Pobranie JSON
 @app.route('/download_json')
 def download_json():
     global global_users_data
@@ -142,6 +97,7 @@ def download_json():
         as_attachment=True
     )
 
+#Lista produktów
 @app.route('/product_list')
 def product_list():
     # Count ratings
@@ -150,7 +106,7 @@ def product_list():
         rating = user["rating"]
         ratings_count[rating] = ratings_count.get(rating, 0) + 1
 
-    plot_url = create_rating_bar_chart(ratings_count)
+    plot_url = produkt.create_rating_bar_chart(ratings_count)
 
     # Count recommendations
     recommendations_count = {}
@@ -159,8 +115,8 @@ def product_list():
         if recommendation in ["Polecam", "Nie polecam"]:
             recommendations_count[recommendation] = recommendations_count.get(recommendation, 0) + 1
 
-    plot_url1 = create_recommended_pie_chart(recommendations_count)
-    return render_with_menu('product_list.html', plot_url=plot_url, plot_url1=plot_url1)
+    plot_url1 = produkt.create_recommended_pie_chart(recommendations_count)
+    return render_with_menu('product_list.html',users_data=global_users_data, plot_url=plot_url, plot_url1=plot_url1)
 
 @app.route('/about')
 def about():

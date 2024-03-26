@@ -13,6 +13,14 @@
             <li><a href="{{ item.url }}">{{ item.name }}</a></li>
         {% endfor %}
     </ul>
+    
+    <a href="/download_csv" download="reviews.csv">
+        <button>Download as CSV</button>
+    </a>
+    <a href="/download_json" download="reviews.json">
+        <button>Download as JSON</button>
+    </a>
+
     <h1>Ratings and Recommendations</h1>
     <!-- Ratings Bar Chart -->
     <div>
@@ -25,5 +33,40 @@
         <h2>Recommendations</h2>
         <img src="data:image/png;base64,{{ plot_url1 }}" alt="Recommendations Pie Chart">
     </div>
+
+    <h1>User Data</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Recommended</th>
+            <th>Rating</th>
+            <th>Is Bought</th>
+            <th>Time Added</th>
+            <th>Time Bought</th>
+            <th>Liked</th>
+            <th>Disliked</th>
+            <th>Opinion</th>
+            <th>Features</th>
+            <th>Flaws</th>
+        </tr>
+        {% for user in users_data %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.recommended }}</td>
+            <td>{{ user.rating }}</td>
+            <td>{{ user.is_bought }}</td>
+            <td>{{ user.time_added }}</td>
+            <td>{{ user.time_bought }}</td>
+            <td>{{ user.liked }}</td>
+            <td>{{ user.dissliked }}</td>
+            <td>{{ user.opinion }}</td>
+            <td>{{ user.features }}</td>
+            <td>{{ user.flaws }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
 </body>
 </html>

@@ -103,17 +103,56 @@ class Scraper:
                 users_data.append(user_data)
 
         return users_data
-    
-    def save(self):
-        wynik = self.extract_reviews()
-        with open('test.json', 'w') as f:
-            json.dump(wynik, f, indent=4)
 
-        with open('test.csv', 'w', newline='', encoding='utf-8') as csv_file:
-            writer = csv.DictWriter(csv_file, fieldnames=[
-                "id", "name", "recommended", "rating", "is_bought",
-                "time_added", "time_bought", "liked", "dissliked",
-                "opinion", "features", "flaws"
-            ])
-            writer.writeheader()
-            writer.writerows(wynik)
+#Wykresy
+class Product:
+    def __init__(self):
+        pass
+        # Funkcja do generowania wykresu słupkowego
+    def create_rating_bar_chart(self, ratings_data):
+        # Extract ratings and their counts
+        ratings = []
+        counts = []
+        for rating, count in ratings_data.items():
+            ratings.append(rating)
+            counts.append(count)
+
+        # Create bar chart
+        plt.figure()  # Create a new figure for each chart
+        plt.bar(ratings, counts, align='center', alpha=0.5)
+        plt.xlabel('Rating')
+        plt.ylabel('Count')
+        plt.title('Ratings and Counts')
+        plt.tight_layout()
+
+        # Save plot to a BytesIO object
+        img = BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        
+        # Encode plot to base64
+        plot_url = base64.b64encode(img.getvalue()).decode()
+        img.close()
+
+        return plot_url
+
+    def create_recommended_pie_chart(self, recommendations_count):
+        # Create pie chart
+        plt.figure()  # Create a new figure for each chart
+        labels = list(recommendations_count.keys())
+        sizes = list(recommendations_count.values())
+        plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+        plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        plt.title('Recommendations')
+        plt.tight_layout()
+
+        # Save plot to a BytesIO object
+        img = BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        
+        # Encode plot to base64
+        plot_url1 = base64.b64encode(img.getvalue()).decode()
+        img.close()
+
+        return plot_url1
