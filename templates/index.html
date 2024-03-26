@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Reviews</title>
+    <title>Strona główna</title>
 </head>
 <body>
-    <h1>Enter Product Details</h1>
-    <form action="/reviews" method="POST">
-        <label for="product_id">Product ID:</label>
-        <input type="text" id="product_id" name="product_id"><br><br>
-        <input type="submit" value="Submit">
-    </form>
+    <h1>Strona główna</h1>
+    <h2>Menu:</h2>
+    <ul>
+        {% for item in menu %}
+            <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h1>Witaj na stronie głównej!</h1>
+    
+    <h2>Krótki opis projektu:</h2>
+    <p><strong>Cel aplikacji:</strong> Aplikacja ma na celu...</p>
+    <p><strong>Opis działania aplikacji:</strong> Aplikacja służy do...</p>
+    <p><strong>Zastosowane biblioteki:</strong> Flask, BeautifulSoup, ...</p>
+    <p><strong>Zastosowane podejścia:</strong> Aplikacja korzysta z podejścia ...</p>
 </body>
 </html>
