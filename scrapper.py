@@ -16,16 +16,15 @@ class Scraper:
         klucz = self.product_id
         users_data = []
 
-        for i in range(1,1000):
+        for i in range(1,10000):
             strona = f"https://www.ceneo.pl/{klucz}/opinie-{i}"
 
             req = requests.get(strona)
             soup = BeautifulSoup(req.content, "html.parser")
             user_posts = soup.find_all("div", class_="user-post")
 
-            #To stop when reaches an end
+            #To stop going to next pages when reaches an end
             review_count_text = soup.find('div', class_='score-extend__review').get_text()
-            # Use regex to extract only the number
             review_count_number = re.search(r'\d+', review_count_text)
             if review_count_number:
                 koniec = int(review_count_number.group())
@@ -104,7 +103,7 @@ class Scraper:
 
         return users_data
 
-#Wykresy
+#CHARTS
 class Product:
     def __init__(self):
         pass
@@ -131,10 +130,10 @@ class Product:
         img.seek(0)
         
         # Encode plot to base64
-        plot_url = base64.b64encode(img.getvalue()).decode()
+        plot_bar = base64.b64encode(img.getvalue()).decode()
         img.close()
 
-        return plot_url
+        return plot_bar
 
     def create_recommended_pie_chart(self, recommendations_count):
         # Create pie chart
@@ -152,7 +151,7 @@ class Product:
         img.seek(0)
         
         # Encode plot to base64
-        plot_url1 = base64.b64encode(img.getvalue()).decode()
+        plot_pie = base64.b64encode(img.getvalue()).decode()
         img.close()
 
-        return plot_url1
+        return plot_pie

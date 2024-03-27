@@ -17,9 +17,9 @@ produkt = Product()
 
 #Adding to every page menu
 menu = [
+    {"name": "Strona główna", "url": "/"},
     {"name": "Ekstrakcja opinii", "url": "/extract_reviews"},
     {"name": "Lista produktów", "url": "/product_list"},
-    {"name": "Strona główna", "url": "/"},
     {"name": "O autorze", "url": "/about"}
 ]
 
@@ -106,7 +106,7 @@ def product_list():
         rating = user["rating"]
         ratings_count[rating] = ratings_count.get(rating, 0) + 1
 
-    plot_url = produkt.create_rating_bar_chart(ratings_count)
+    plot_bar = produkt.create_rating_bar_chart(ratings_count)
 
     # Count recommendations
     recommendations_count = {}
@@ -115,8 +115,8 @@ def product_list():
         if recommendation in ["Polecam", "Nie polecam"]:
             recommendations_count[recommendation] = recommendations_count.get(recommendation, 0) + 1
 
-    plot_url1 = produkt.create_recommended_pie_chart(recommendations_count)
-    return render_with_menu('product_list.html',users_data=global_users_data, plot_url=plot_url, plot_url1=plot_url1)
+    plot_pie = produkt.create_recommended_pie_chart(recommendations_count)
+    return render_with_menu('product_list.html',users_data=global_users_data, plot_bar=plot_bar, plot_pie=plot_pie)
 
 @app.route('/about')
 def about():
