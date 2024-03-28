@@ -21,12 +21,19 @@
         </ul>
     </nav>
 
-    <h1 class="center-header">Witaj na stronie głównej!</h1>
-    
-    <h2>Krótki opis projektu:</h2>
-    <p><strong>Cel aplikacji:</strong> Aplikacja ma na celu...</p>
-    <p><strong>Opis działania aplikacji:</strong> Aplikacja służy do...</p>
-    <p><strong>Zastosowane biblioteki:</strong> Flask, BeautifulSoup, ...</p>
-    <p><strong>Zastosowane podejścia:</strong> Aplikacja korzysta z podejścia ...</p>
+    <div class="main-menu">
+        <h2 class="text-dark center-header"><strong>Opis projektu:</strong></h2>
+        <div class="col-sm"><p class="bg-dark text-white"><strong>Cel aplikacji:</strong><br> Aplikacja ma na celu pobranie wszytskich opinii z serwisu Ceneo.pl</p></div>
+        <div class="col-sm"><p class="bg-dark text-white"><strong>Opis działania aplikacji:</strong><br> Aplikacja służy do pobrania infromacji o danym produkcie i po podaniu klucza wyświetla zarówno wykresy ocen i rekomendacji jak również umożliwia wyświetlenie wszytskich informacji i pobrania ich.</p></div>
+        <div class="col-sm"><p class="bg-dark text-white"><strong>Zastosowane biblioteki:</strong><br> Flask, Bootstrap, BeautifulSoup, json, csv, matplotlib, io, base64, re, requests</p></div>
+        <div class="col-sm"><p class="bg-dark text-white"><strong>Zastosowane podejścia:</strong><br> Aplikacja korzysta z podejścia web scrapingu do pobierania opinii z serwisu Ceneo.pl.
+             Wykorzystuje biblioteki Pythona, takie jak BeautifulSoup do parsowania strony internetowej i ekstrakcji danych. Dodatkowo, 
+             aplikacja wykorzystuje framework Flask do obsługi żądań HTTP oraz biblioteki Bootstrap do responsywnego projektowania interfejsu użytkownika.
+              Po pobraniu danych, aplikacja umożliwia ich prezentację za pomocą wykresów, które są generowane przy użyciu biblioteki matplotlib. 
+              Ponadto, aplikacja umożliwia eksport pobranych danych do plików CSV za pomocą biblioteki csv oraz prezentację wykresów w interfejsie 
+              użytkownika w formie graficznej, co jest osiągane dzięki wykorzystaniu biblioteki base64 do konwersji obrazów oraz modułu io do manipulacji 
+              danymi binarnymi. Ostatecznie, zastosowane podejście obejmuje także wykorzystanie modułu re do wykonywania operacji na wyrażeniach 
+              regularnych oraz biblioteki requests do wysyłania żądań HTTP.</p></div>
+    </div>  
 </body>
 </html>

@@ -3,11 +3,6 @@ from scrapper import Scraper, Product  # Import the Scraper class from scraper.p
 import json
 import csv
 import io
-import matplotlib
-matplotlib.use('Agg')  # Set the backend to Agg before importing pyplot
-import matplotlib.pyplot as plt
-from io import BytesIO
-import base64
 
 app = Flask(__name__)
 
@@ -23,7 +18,7 @@ menu = [
     {"name": "O autorze", "url": "/about"}
 ]
 
-# Funkcja renderująca szablon z menu
+# Function to render menu with site
 def render_with_menu(template_name, **kwargs):
     return render_template(template_name, menu=menu, **kwargs)
 
@@ -56,12 +51,12 @@ def reviews():
         error_message = f"An error occurred: {str(e)}"
         return redirect(url_for('error', error_message=error_message))
 
-# Obsługa błędów
+# Error handling
 @app.route('/error/<error_message>')
 def error(error_message):
     return render_template('error.html', error_message=error_message)
 
-#Pobranie CSV
+#Download CSV
 @app.route('/download_csv')
 def download_csv():
     global global_users_data
@@ -81,7 +76,7 @@ def download_csv():
         as_attachment=True
     )
 
-#Pobranie JSON
+#Download JSON
 @app.route('/download_json')
 def download_json():
     global global_users_data
@@ -97,7 +92,7 @@ def download_json():
         as_attachment=True
     )
 
-#Lista produktów
+#Product List
 @app.route('/product_list')
 def product_list():
     # Count ratings

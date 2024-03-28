@@ -15,7 +15,7 @@ class Scraper:
     def extract_reviews(self):
         klucz = self.product_id
         users_data = []
-
+    #Load a page and go on each page till last opinion
         for i in range(1,10000):
             strona = f"https://www.ceneo.pl/{klucz}/opinie-{i}"
 
@@ -107,7 +107,7 @@ class Scraper:
 class Product:
     def __init__(self):
         pass
-        # Funkcja do generowania wykresu słupkowego
+        # Function to generate bar chart
     def create_rating_bar_chart(self, ratings_data):
         # Extract ratings and their counts
         ratings = []
