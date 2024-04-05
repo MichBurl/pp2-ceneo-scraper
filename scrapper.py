@@ -21,7 +21,7 @@ class Scraper:
 
             req = requests.get(strona)
             soup = BeautifulSoup(req.content, "html.parser")
-            user_posts = soup.find_all("div", class_="user-post")
+            user_posts = soup.find_all("div", class_="js_product-review")
 
             #To stop going to next pages when reaches an end
             review_count_text = soup.find('div', class_='score-extend__review').get_text()
