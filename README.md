@@ -52,8 +52,8 @@ This project scrapes product data from Ceneo.pl using Python's `requests` and `B
 
 4. Run the application:
 
-    ```python
-    app.py
+    ```bash
+    python app.py
     ```
 
 ## Usage
